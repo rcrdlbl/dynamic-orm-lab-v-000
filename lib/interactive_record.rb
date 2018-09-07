@@ -19,7 +19,7 @@ class InteractiveRecord
     column_names.compact
   end
 
-  def initialize(options={})
+  def intialize(options={})
     options.each do |property, value|
       self.send("#{property}=", value)
     end
@@ -47,9 +47,14 @@ class InteractiveRecord
     self.class.column_names.delete_if {|col| col == "id"}.join(", ")
   end
 
+  def self.find_by_name(name)
+    sql = "SELECT * FROM #{self.table_name} WHERE name = '#{name}'"
+    DB[:conn].execute(sql)
+  end
+
   def self.find_by(attributes)
     sql = "SELECT * FROM #{self.table_name} WHERE #{attributes.keys[0]} = '#{attributes.values[0]}'"
     DB[:conn].execute(sql)
   end
-
+  
 end
